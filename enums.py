@@ -6,3 +6,4 @@ class ExtraEffectType(Enum):
     HEAL_HP_3 = auto()
     FOCUS_UP = auto()#集中バフ
     CONDITION_UP = auto()#好調バフ
+    GREATCONDITION_UP = auto()#絶好調バフ

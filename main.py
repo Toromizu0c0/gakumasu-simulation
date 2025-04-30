@@ -8,32 +8,47 @@ def printBuff(gameState):
         print(f"🔥集中： {game_state['focus']}")
     if gameState['condition'] != 0:
         print(f"💪好調： {game_state['condition']}")
+    if gameState['great_condition'] != 0:
+        print(f"絶好調： {game_state['great_condition']}")
 
 deck = Deck()
 cards = [
     #名前，コスト，スコア，追加効果，説明文
     
-    Card("筋トレ", 3, 2),
-    Card("読書", 2, 1, ExtraEffectType.DRAW_1,
-         effect_description="次のターン，手札+1"),
+    Card("筋トレ", 3, 2,
+         effect_description="スコア+2",
+         effects = {}),
     
-    Card("瞑想", 1, 1, ExtraEffectType.COST_DOWN_NEXT, 
-         effect_description="体力回復+3"),
+    Card("読書", 2, 1,
+         effect_description="次のターン，手札+1",
+         effects = {"next_hand":1}),
     
-    Card("ランニング", 2, 2),
+    Card("瞑想", 1, 1, 
+         effect_description="体力回復+3",
+         effects = {"hp:3"}),
     
-    Card("休憩", 0, 0, ExtraEffectType.HEAL_HP_3, 
-         effect_description="次のカードの消費体力-1"),
+    Card("ランニング", 2, 2,
+         effect_description="スコア+2",
+         effects={}),
     
-    Card("ゲーム", 4, 3),
+    # Card("休憩", 0, 0, ExtraEffectType.HEAL_HP_3, 
+    #      effect_description="次のカードの消費体力-1"),
+    
+    Card("ゲーム", 4, 3,
+         effect_description="スコア+3",
+         effects={}),
     
     Card("精神統一", 0, 1, 
-         extra_effect=ExtraEffectType.FOCUS_UP, 
-         effect_description="集中を+1獲得"),
+         effect_description="集中を+1獲得",
+         effects={"focus":1}),
     
     Card("軽い",2, 3,
-         extra_effect= ExtraEffectType.CONDITION_UP,
-         effect_description="好調が3上昇")
+         effect_description="好調が3増加",
+         effects={"condition":3}),
+    
+    Card("計画", 2, 0, 
+         effect_description="絶好調が+3増加",
+         effects={"greatcondition":3})
 ]
 
 for c in cards:
@@ -52,24 +67,21 @@ for turn in range(1, 10):
     deck.show_piles()
     if deck.hand and game_state["hp"] > 0:
         choice = input("使いたいカードの番号を入力（スキップはEnter，現在の山札一覧表示はa）: ").strip()
-        if choice != "":
-            try:
+        if choice != "": 
+            if choice >= "0" and choice < str(game_state['hand_size']):
                 index = int(choice)
-                deck.play_card(index, game_state)
-            except ValueError:
-                print("⚠️ 無効な入力です。カードは使用されませんでした。")
-        elif choice == "":
+                deck.play_card( index, game_state)
+            elif choice == "a":
+                deck.show_deck()
+        else:
             deck.skip_turn(game_state)
-        elif choice == "a":
-            deck.show_deck()
+
             continue
             
     else:
         print("カードが使えないか、体力がありません。")
     deck.end_turn()
     deck.show_piles()
-    if game_state["hp"] <= 0:
-        print("💀 体力が尽きました！ゲーム終了！")
-        break
+    
 print(f"\n🎯 最終スコア: {game_state['score']}（残り体力: {game_state['hp']}）")
 

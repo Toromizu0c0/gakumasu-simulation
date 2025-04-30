@@ -27,7 +27,7 @@ class Deck:
             self.draw_pile = self.discard_pile
             self.discard_pile = []
             self.shuffle_draw_pile()
-            print("🔄 捨て札を山札に戻してシャッフルしました。")
+            print("🔄 捨て札を山札に戻してシャッフル。")
 
     def start_turn(self, game_state):
         self.hand = []
@@ -36,7 +36,7 @@ class Deck:
         self.draw_cards(game_state.get("hand_size", 3))
         
 
-    def play_card(self, index: int, game_state: dict):
+    def play_card(self, index: int, game_state):
         if 0 <= index < len(self.hand):
             card = self.hand[index]
             effective_cost = max(0, card.cost - game_state.get("cost_modifier", 0))
@@ -49,16 +49,20 @@ class Deck:
             #スコアの計算
             focus_bonus = game_state.get("focus", 0)
             condition_bonus = game_state.get("condition", 0)
+            great_condition_bonus = game_state.get("great_condition", 0)
             total_score = focus_bonus + card.score_up#集中の計算
             if condition_bonus != 0:#好調の計算
                 total_score *= 1.5
+                math.floor(total_score)
+            if great_condition_bonus != 0:#絶好調の計算
+                total_score *= (1+(0.1*great_condition_bonus))
                 math.floor(total_score)
                 
             print(f"✅ {card.name} を使用しました（スコア +({total_score}), 体力 -{effective_cost}）")
             game_state["score"] += total_score
             game_state["hp"] -= effective_cost
             game_state["cost_modifier"] = 0  # 効果のリセット
-            card.apply_effect(self, game_state)
+            card.apply_effect(game_state)
             return card
         else:
             print("その番号のカードは存在しません")
