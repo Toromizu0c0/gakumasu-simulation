@@ -25,7 +25,7 @@ cards = [
     
     Card("瞑想", 1, 1, 
          effect_description="体力回復+3",
-         effects = {"hp:3"}),
+         effects = {"hp":3}),
     
     Card("ランニング", 2, 2,
          effect_description="スコア+2",
@@ -57,7 +57,7 @@ deck.shuffle_draw_pile()
 
 game_state = create_game_state()
 
-for turn in range(1, 10):
+for turn in range(1, 20):
     print(f"\n🎲 --- ターン {turn} ---")
     print(f"❤️ 体力: {game_state['hp']} | 🏆 スコア: {game_state['score']}")
     printBuff(game_state)
@@ -65,21 +65,19 @@ for turn in range(1, 10):
     deck.start_turn(game_state)
     deck.show_hand()
     deck.show_piles()
-    if deck.hand and game_state["hp"] > 0:
-        choice = input("使いたいカードの番号を入力（スキップはEnter，現在の山札一覧表示はa）: ").strip()
-        if choice != "": 
-            if choice >= "0" and choice < str(game_state['hand_size']):
-                index = int(choice)
-                deck.play_card( index, game_state)
-            elif choice == "a":
-                deck.show_deck()
-        else:
-            deck.skip_turn(game_state)
-
-            continue
+    
+    choice = input("使いたいカードの番号を入力（スキップはEnter，現在の山札一覧表示はa）: ").strip()
+    if choice != "": 
+        if choice >= "0" and choice < str(game_state['hand_size']):
+            index = int(choice)
+            result = deck.play_card( index, game_state)
             
+        elif choice == "a":
+            deck.show_deck()
     else:
-        print("カードが使えないか、体力がありません。")
+        deck.skip_turn(game_state)
+        continue
+        
     deck.end_turn()
     deck.show_piles()
     
