@@ -75,16 +75,23 @@ while turn<=20 :#ターン回し
             result = deck.play_card( index, game_state)
             
         elif choice == "a":
+            #山札一覧表示
             deck.show_deck()
+        
+        if result == None:
+            #体力が足りない or 想定外の入力
+            print(f"result -> None")
+            deck.end_turn()
+            deck.show_piles()
+            continue
+        
     else:
-        deck.end_turn()
-        deck.show_piles()
+        #何も入力されなかった場合（スキップ）
         deck.skip_turn(game_state)
-        continue
+        
         
     deck.end_turn()
     deck.show_piles()
     turn += 1
     
 print(f"\n🎯 最終スコア: {game_state['score']}（残り体力: {game_state['hp']}）")
-

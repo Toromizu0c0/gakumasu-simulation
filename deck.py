@@ -28,13 +28,7 @@ class Deck:
                 
             if self.draw_pile:
                 #ドローできる
-                self.hand.append(self.draw_pile.pop(0))            
-            
-        #     print(len(self.draw_pile))
-        #     if len(self.draw_pile) < num:
-        #         self.reshuffle_discard_into_draw()
-        #     else:
-        #         self.hand.append(self.draw_pile.pop(0))
+                self.hand.append(self.draw_pile.pop(0))
 
     def reshuffle_discard_into_draw(self):
         if self.discard_pile or self.draw_pile:
