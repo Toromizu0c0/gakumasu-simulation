@@ -16,15 +16,30 @@ class Deck:
         random.shuffle(self.draw_pile)
 
     def draw_cards(self, num: int):
+        #num->手札の枚数
         for _ in range(num):
-            if not self.draw_pile:
+            if not self.draw_pile and not self.discard_pile:
+                #ドローできるカードが無い
+                break
+            
+            if len(self.draw_pile) == 0:
+                #ドローの際山札が足りない
                 self.reshuffle_discard_into_draw()
+                
             if self.draw_pile:
-                self.hand.append(self.draw_pile.pop(0))
+                #ドローできる
+                self.hand.append(self.draw_pile.pop(0))            
+            
+        #     print(len(self.draw_pile))
+        #     if len(self.draw_pile) < num:
+        #         self.reshuffle_discard_into_draw()
+        #     else:
+        #         self.hand.append(self.draw_pile.pop(0))
 
     def reshuffle_discard_into_draw(self):
-        if self.discard_pile:
-            self.draw_pile = self.discard_pile
+        if self.discard_pile or self.draw_pile:
+            #捨て札と山札どちらかがある（この条件なぜ）
+            self.draw_pile += self.discard_pile#山札の残りと，捨て札を結合
             self.discard_pile = []
             self.shuffle_draw_pile()
             print("🔄 捨て札を山札に戻してシャッフル。")

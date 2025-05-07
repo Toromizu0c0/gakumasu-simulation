@@ -57,7 +57,9 @@ deck.shuffle_draw_pile()
 
 game_state = create_game_state()
 
-for turn in range(1, 20):
+turn=1
+while turn<=20 :#ターン回し
+# for turn in range(1, 20):
     print(f"\n🎲 --- ターン {turn} ---")
     print(f"❤️ 体力: {game_state['hp']} | 🏆 スコア: {game_state['score']}")
     printBuff(game_state)
@@ -75,11 +77,14 @@ for turn in range(1, 20):
         elif choice == "a":
             deck.show_deck()
     else:
+        deck.end_turn()
+        deck.show_piles()
         deck.skip_turn(game_state)
         continue
         
     deck.end_turn()
     deck.show_piles()
+    turn += 1
     
 print(f"\n🎯 最終スコア: {game_state['score']}（残り体力: {game_state['hp']}）")
 
