@@ -71,7 +71,7 @@ while turn<=20 :#ターン回し
     
     choice = input("使いたいカードの番号を入力（スキップはEnter，現在の山札一覧表示はa）: ").strip()
     if choice != "": 
-        if choice >= "0" and choice < str(game_state['hand_size']):
+        if choice >= "0" and choice < str(game_state['hand_size']):#想定内の入力
             index = int(choice)
             result = deck.play_card( index, game_state)
             
