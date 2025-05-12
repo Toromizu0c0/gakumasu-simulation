@@ -23,7 +23,7 @@ cards = [
          effect_description="次のターン，手札+1",
          effects = {"next_hand":1}),
     
-    Card("瞑想", 1, 1, 
+    Card("瞑想", 4, 1, 
          effect_description="体力回復+3",
          effects = {"hp":3}),
     
@@ -38,7 +38,7 @@ cards = [
          effect_description="スコア+3",
          effects={}),
     
-    Card("精神統一", 0, 1, 
+    Card("精神統一", 3, 1, 
          effect_description="集中を+1獲得",
          effects={"focus":1}),
     
@@ -53,7 +53,7 @@ cards = [
 
 for c in cards:
     deck.add_card(c)
-deck.shuffle_draw_pile()
+deck.shuffle_pile(deck.draw_pile)
 
 game_state = create_game_state()
 
@@ -65,8 +65,9 @@ while turn<=20 :#ターン回し
     printBuff(game_state)
     
     deck.start_turn(game_state)
-    deck.show_hand()
     deck.show_piles()
+    deck.show_hand()
+    
     
     choice = input("使いたいカードの番号を入力（スキップはEnter，現在の山札一覧表示はa）: ").strip()
     if choice != "": 

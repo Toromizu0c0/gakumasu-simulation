@@ -12,8 +12,8 @@ class Deck:
     def add_card(self, card: Card):
         self.draw_pile.append(card)
 
-    def shuffle_draw_pile(self):
-        random.shuffle(self.draw_pile)
+    def shuffle_pile(self, pile):
+        random.shuffle(pile)
 
     def draw_cards(self, num: int):
         #num->手札の枚数
@@ -33,9 +33,10 @@ class Deck:
     def reshuffle_discard_into_draw(self):
         if self.discard_pile or self.draw_pile:
             #捨て札と山札どちらかがある（この条件なぜ）
+            self.shuffle_pile(self.discard_pile)
             self.draw_pile += self.discard_pile#山札の残りと，捨て札を結合
             self.discard_pile = []
-            self.shuffle_draw_pile()
+            
             print("🔄 捨て札を山札に戻してシャッフル。")
 
     def start_turn(self, game_state):
@@ -53,7 +54,7 @@ class Deck:
                 print(f"❌ {card.name} を使用するには体力が足りません！（必要: {effective_cost}, 現在: {game_state['hp']}）")
                 return None
             self.hand.pop(index)
-            self.banished_pile.append(card)
+            self.banished_pile.append(card)#捨て札へ移動
             
             #スコアの計算
             focus_bonus = game_state.get("focus", 0)
