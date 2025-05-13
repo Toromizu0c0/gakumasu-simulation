@@ -41,8 +41,16 @@ class Deck:
 
     def start_turn(self, game_state):
         self.hand = []
-        if game_state['condition'] >= 1:
+        
+        #フラグが立っていないときは消費する
+        if game_state['condition'] >= 1 and game_state['condition_gained'] == False:
             game_state['condition'] -= 1
+        if game_state['great_condition'] >= 1 and game_state['great_condition_gained'] == False:
+            game_state['great_condition'] -= 1
+            
+        game_state['condition_gained'] = False
+        game_state['great_condition_gained'] = False
+        
         self.draw_cards(game_state.get("hand_size", 3))
         
 
@@ -63,10 +71,11 @@ class Deck:
             total_score = focus_bonus + card.score_up#集中の計算
             if condition_bonus != 0:#好調の計算
                 total_score *= 1.5
-                math.floor(total_score)
+                total_score = math.floor(total_score)
+                
             if great_condition_bonus != 0:#絶好調の計算
                 total_score *= (1+(0.1*great_condition_bonus))
-                math.floor(total_score)
+                total_score = math.floor(total_score)
                 
             print(f"✅ {card.name} を使用しました（スコア +({total_score}), 体力 -{effective_cost}）")
             game_state["score"] += total_score

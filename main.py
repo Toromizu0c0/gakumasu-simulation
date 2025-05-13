@@ -1,6 +1,5 @@
 from CardClass import Card
 from deck import Deck
-from enums import ExtraEffectType
 from game_state import create_game_state
 
 def printBuff(gameState):

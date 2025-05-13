@@ -1,3 +1,5 @@
+from effect_handler import EffectHandler
+
 class Card:
     def __init__(self, name: str, score_up: int, cost: int,
                  effect_description: str = "", effects=None):
@@ -14,14 +16,5 @@ class Card:
 
     def apply_effect(self, game_state):
         #追加効果処理の実装
-        
-        for key, value in self.effects.items():
-            if key == "hp":
-                before = game_state["hp"]
-                game_state["hp"] = min(game_state["max_hp"], game_state["hp"] + value)
-                print(f"💖 HP: {before} → {game_state['hp']}")               
-            elif key in game_state:
-                before = game_state[key]
-                game_state[key] += value
-
-
+        handler = EffectHandler(game_state)
+        handler.apply(self.effects)
